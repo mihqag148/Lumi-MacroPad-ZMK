@@ -1,0 +1,12 @@
+if SHIELD_LUMI_MACROPAD || SHIELD_LUMI_MACROPAD_TFT
+
+config ZMK_KEYBOARD_NAME
+    default "Lumi MacroPad"
+
+config EC11
+    default y
+
+config EC11_TRIGGER_GLOBAL_THREAD
+    default y
+
+endif

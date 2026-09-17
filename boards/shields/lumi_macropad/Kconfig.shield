@@ -1,0 +1,5 @@
+config SHIELD_LUMI_MACROPAD
+    def_bool $(shields_list_contains,lumi_macropad)
+
+config SHIELD_LUMI_MACROPAD_TFT
+    def_bool $(shields_list_contains,lumi_macropad_tft)

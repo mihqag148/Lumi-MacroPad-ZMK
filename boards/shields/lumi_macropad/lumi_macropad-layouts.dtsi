@@ -1,0 +1,40 @@
+\
+#include <physical_layouts.dtsi>
+
+/ {
+    lumi_macropad_layout: lumi_macropad_layout {
+        compatible = "zmk,physical-layout";
+        display-name = "Lumi MacroPad 12+Encoder";
+
+        /*
+         * Order matches the keymap:
+         * K1 K2 K3
+         * K4 K5 K6
+         * K7 K8 K9
+         * K10 K11 K12
+         * encoder push
+         *
+         * Encoder push is drawn at top-right in ZMK Studio.
+         */
+        keys
+        //                         w   h    x    y    rot   rx   ry
+            = <&key_physical_attrs 100 100    0  100      0    0    0>
+            , <&key_physical_attrs 100 100  100  100      0    0    0>
+            , <&key_physical_attrs 100 100  200  100      0    0    0>
+
+            , <&key_physical_attrs 100 100    0  200      0    0    0>
+            , <&key_physical_attrs 100 100  100  200      0    0    0>
+            , <&key_physical_attrs 100 100  200  200      0    0    0>
+
+            , <&key_physical_attrs 100 100    0  300      0    0    0>
+            , <&key_physical_attrs 100 100  100  300      0    0    0>
+            , <&key_physical_attrs 100 100  200  300      0    0    0>
+
+            , <&key_physical_attrs 100 100    0  400      0    0    0>
+            , <&key_physical_attrs 100 100  100  400      0    0    0>
+            , <&key_physical_attrs 100 100  200  400      0    0    0>
+
+            , <&key_physical_attrs 100 100  350    0      0    0    0>
+            ;
+    };
+};

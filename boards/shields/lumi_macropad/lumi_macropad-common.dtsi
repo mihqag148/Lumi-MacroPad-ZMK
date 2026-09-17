@@ -1,0 +1,89 @@
+\
+#include <dt-bindings/zmk/matrix_transform.h>
+#include <zephyr/dt-bindings/gpio/gpio.h>
+#include "lumi_macropad-layouts.dtsi"
+
+/ {
+    chosen {
+        zmk,kscan = &kscan0;
+        zmk,physical-layout = &lumi_macropad_layout;
+    };
+
+    /*
+     * Physical pins printed on the user's board:
+     *
+     * ROW0 009 = P0.09
+     * ROW1 010 = P0.10
+     * ROW2 111 = P1.11
+     * ROW3 113 = P1.13
+     *
+     * COL0 115 = P1.15
+     * COL1 002 = P0.02
+     * COL2 029 = P0.29
+     * COL3 031 = P0.31
+     *
+     * Diodes: COL -> switch -> diode -> ROW
+     * Black stripe/cathode toward ROW => col2row.
+     */
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-matrix";
+        wakeup-source;
+        diode-direction = "col2row";
+
+        row-gpios
+            = <&gpio0 9  (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio0 10 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio1 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&gpio1 13 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            ;
+
+        col-gpios
+            = <&gpio1 15 GPIO_ACTIVE_HIGH>
+            , <&gpio0 2  GPIO_ACTIVE_HIGH>
+            , <&gpio0 29 GPIO_ACTIVE_HIGH>
+            , <&gpio0 31 GPIO_ACTIVE_HIGH>
+            ;
+    };
+
+    /*
+     * Keymap order intentionally omits the 3 unused positions in COL3,
+     * then puts encoder push (ROW0/COL3) at position 13.
+     */
+    default_transform: keymap_transform {
+        compatible = "zmk,matrix-transform";
+        rows = <4>;
+        columns = <4>;
+
+        map = <
+            RC(0,0) RC(0,1) RC(0,2)
+            RC(1,0) RC(1,1) RC(1,2)
+            RC(2,0) RC(2,1) RC(2,2)
+            RC(3,0) RC(3,1) RC(3,2)
+            RC(0,3)
+        >;
+    };
+
+    /*
+     * EC11:
+     * A = physical 104 = P1.04
+     * B = physical 106 = P1.06
+     */
+    encoder0: encoder0 {
+        compatible = "alps,ec11";
+        a-gpios = <&gpio1 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
+        b-gpios = <&gpio1 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>;
+        steps = <80>;
+        status = "okay";
+    };
+
+    sensors: sensors {
+        compatible = "zmk,keymap-sensors";
+        sensors = <&encoder0>;
+        triggers-per-rotation = <20>;
+    };
+};
+
+&lumi_macropad_layout {
+    transform = <&default_transform>;
+    kscan = <&kscan0>;
+};
